@@ -86,6 +86,15 @@ Keunggulan *Public Cloud* murni hanya pada elastisitas dan efisiensi biaya, dan 
 *Hybrid Cloud* memberikan keseimbangan terbaik antara **kerahasiaan** dan **skalabilitas**: data induk dan biometrik tetap berada di bawah kendali penuh negara di *Private Cloud* (IaaS), sedangkan lapisan *stateless* (API Gateway dan portal publik) memanfaatkan elastisitas *Public Cloud* (PaaS/SaaS). Risiko utama (sinkronisasi data, kebocoran jalur penghubung, penyalahgunaan akses mitra, dan ketergantungan penyedia) dapat dimitigasi dengan desain *stateless*, enkripsi *mutual TLS* + HSM, kontrol akses *scope* minimum, serta tautan redundan.
 
 
+
+## Diagram Arsitektur Sistem
+
+Berikut merupakan diagram alur arsitektur Hybrid Cloud yang menggambarkan pembagian komponen Public Cloud dan Private Cloud pada Sistem Data Kependudukan.
+
+![Diagram Arsitektur Hybrid Cloud](bukti/diagram-arsitektur-hybrid-cloud.png)
+
+
+
 ## Struktur Submission
 
 ```
