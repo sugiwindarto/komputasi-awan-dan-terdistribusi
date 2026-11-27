@@ -5,7 +5,6 @@ Mengirim banyak request konkuren ke Load Balancer (http://localhost:8080)
 dan menghitung berapa kali masing-masing instance app menangani request,
 untuk membuktikan distribusi beban.
 """
-
 import urllib.request
 import threading
 import time
@@ -18,22 +17,29 @@ CONCURRENCY = 30
 hasil = Counter()
 lock = threading.Lock()
 
-
 def kirim_request():
     # TODO 1: lakukan GET request ke TARGET_URL, baca body response
     # (yang berisi INSTANCE_ID dari app/app.py), lalu update `hasil`
     # (Counter) dengan lock supaya thread-safe.
+
+    mulai_req = time.perf_counter()
+
     try:
         with urllib.request.urlopen(TARGET_URL, timeout=5) as resp:
             body = resp.read().decode()
+            durasi_ms = (time.perf_counter() - mulai_req) * 1000
             # TODO 2: ekstrak instance_id dari `body` sesuai format response
             # yang kalian buat di app.py, lalu:
             # with lock:
             #     hasil[instance_id] += 1
-            pass
+            instance_id = body.strip().split(":")[-1].strip() if ":" in body else "load-balancer"
+            with lock:
+                hasil[instance_id] += 1
+  
     except Exception as e:
         with lock:
             hasil["ERROR"] += 1
+
 
 
 def main():
@@ -47,6 +53,12 @@ def main():
         t.start()
         # TODO 3: batasi jumlah thread aktif bersamaan sesuai CONCURRENCY
         # (mis. dengan semaphore, atau proses batch per CONCURRENCY thread).
+
+        batch_size = CONCURRENCY
+        if len(threads) % batch_size == 0:
+            for t in threads[-batch_size:]:
+                t.join()
+
 
     for t in threads:
         t.join()

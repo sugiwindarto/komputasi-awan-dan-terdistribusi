@@ -9,7 +9,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 # TODO 1: ambil ID instance dari environment variable "INSTANCE_ID"
 # (akan di-set berbeda per service di docker-compose.yml).
-INSTANCE_ID = os.environ.get("INSTANCE_ID", "__BELUM_DI_SET__")
+INSTANCE_ID = os.environ.get("INSTANCE_ID", "load-balancer")
+
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -22,7 +23,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "text/plain")
         self.end_headers()
-        self.wfile.write(b"TODO: kembalikan INSTANCE_ID di sini\n")
+        self.wfile.write(f"Ditangani oleh instance: {INSTANCE_ID}\n".encode())
 
     def log_message(self, format, *args):
         # Log singkat ke stdout supaya kelihatan di `docker compose logs`
